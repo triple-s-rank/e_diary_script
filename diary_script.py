@@ -67,7 +67,6 @@ def remove_chastisements(student_name: str) -> int:
 
 def create_commendation(student_name: str, subject: str) -> Commendation:
 	student = get_student(student_name)
-	print(type(student))
 	try:
 		lessons = Lesson.objects.filter(
 			subject__title__contains=subject,
