@@ -33,7 +33,7 @@ commendation_examples = [
 ]
 
 
-def get_student(student_name: str) -> Schoolkid:
+def get_student_if_exists(student_name: str) -> Schoolkid:
     try:
         student = Schoolkid.objects.get(full_name__contains=student_name)
         return student
@@ -44,7 +44,7 @@ def get_student(student_name: str) -> Schoolkid:
 
 
 def fix_marks(student_name: str) -> int:
-    student = get_student(student_name)
+    student = get_student_if_exists(student_name)
     bad_marks = Mark.objects.filter(schoolkid=student, points__in=[1, 2, 3])
     if not bad_marks:
         print('Нет плохих оценок!')
@@ -56,7 +56,7 @@ def fix_marks(student_name: str) -> int:
 
 
 def remove_chastisements(student_name: str) -> int:
-    student = get_student(student_name)
+    student = get_student_if_exists(student_name)
     chastisements = Chastisement.objects.filter(schoolkid=student)
     if not chastisements:
         print('Замечаний нет!')
@@ -66,7 +66,7 @@ def remove_chastisements(student_name: str) -> int:
 
 
 def create_commendation(student_name: str, subject: str) -> Commendation:
-    student = get_student(student_name)
+    student = get_student_if_exists(student_name)
     try:
         lessons = Lesson.objects.filter(
             subject__title__contains=subject,
