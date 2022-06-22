@@ -46,9 +46,7 @@ def get_student_if_exists(student_name: str) -> Schoolkid:
 def fix_marks(student_name: str) -> int:
     student = get_student_if_exists(student_name)
     bad_marks = Mark.objects.filter(schoolkid=student, points__in=[1, 2, 3])
-    if not bad_marks:
-        print('Нет плохих оценок!')
-        return
+    if not bad_marks: raise Mark.DoesNotExist('Нет плохих оценок!')
     for mark in bad_marks:
         mark.points = 5
         mark.save()
@@ -58,9 +56,7 @@ def fix_marks(student_name: str) -> int:
 def remove_chastisements(student_name: str) -> int:
     student = get_student_if_exists(student_name)
     chastisements = Chastisement.objects.filter(schoolkid=student)
-    if not chastisements:
-        print('Замечаний нет!')
-        return
+    if not chastisements: raise Chastisement.DoesNotExist('Замечаний нет!')
     chastisements.delete()
     print('Все замечания удалены!')
 
@@ -81,7 +77,8 @@ def create_commendation(student_name: str, subject: str) -> Commendation:
             subject=lesson.subject,
             schoolkid=student
         )
-        print(f'Благодарность по предмету {subject} от учителя- {lesson.teacher} c текстом "{commendation.text}" создана.')
+        print(
+            f'Благодарность по предмету {subject} от учителя- {lesson.teacher} c текстом "{commendation.text}" создана.')
     except Subject.DoesNotExist:
         return f'Предмет {subject} не найден в {student.year_of_study}{student.group_letter}классe.'
     except Lesson.DoesNotExist:
