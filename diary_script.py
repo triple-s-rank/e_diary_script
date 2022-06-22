@@ -38,9 +38,9 @@ def get_student_if_exists(student_name: str) -> Schoolkid:
         student = Schoolkid.objects.get(full_name__contains=student_name)
         return student
     except Schoolkid.DoesNotExist:
-        return 'Ученика с таким именем не существует.'
+        raise Schoolkid.DoesNotExist('Ученика с таким именем не существует.')
     except Schoolkid.MultipleObjectsReturned:
-        return 'Найдено несколько учеников с таким именем!'
+        raise Schoolkid.MultipleObjectsReturned('Найдено несколько учеников с таким именем!')
 
 
 def fix_marks(student_name: str) -> int:
@@ -80,6 +80,6 @@ def create_commendation(student_name: str, subject: str) -> Commendation:
         print(
             f'Благодарность по предмету {subject} от учителя- {lesson.teacher} c текстом "{commendation.text}" создана.')
     except Subject.DoesNotExist:
-        return f'Предмет {subject} не найден в {student.year_of_study}{student.group_letter}классe.'
+        raise Subject.DoesNotExist(f'Предмет {subject} не найден в {student.year_of_study}{student.group_letter}классe.')
     except Lesson.DoesNotExist:
-        return f'Урок не найден'
+        raise Lesson.DoesNotExist(f'Урок не найден')
